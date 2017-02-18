@@ -20,6 +20,12 @@ RUN curl -Ls $RUST_DOWNLOAD_URL | tar xz -C /tmp \
 
 
 #======================#
+# Add Additional Files #
+#======================#
+COPY kcov-rust /usr/bin/
+
+
+#======================#
 # Finalize Environment #
 #======================#
 WORKDIR /home

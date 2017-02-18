@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# kcov-rust
+#
+
+PROGRAM_NAME=$0
+OUTPUT_NAME=''
+
+function print_usage() {
+  echo "$PROGRAM_NAME"
+  echo ""
+  echo "usage: $PROGRAM_NAME [TARGET_NAME]"
+  echo ""
+  echo "  TARGET_NAME : The name of the cargo library to test (uses the most recently created test executable by default)"
+}
+
+while (( $# )); do
+  arg="$1"
+  case $arg in
+  -h|--help)
+      print_usage
+      exit 0
+      ;;
+  *)
+      if [ -z $OUTPUT_NAME ]; then
+        OUTPUT_NAME=$arg
+      else
+        echo "Unexpected argument '$arg'"
+        print_usage
+        exit 1
+      fi
+     ;;
+  esac
+  shift
+done
+
+if [ -z $OUTPUT_NAME ]; then OUTPUT_NAME=*; fi
+
+# this finds the newest file matching the patter target/debug/<ARG>-*, which is the test executable
+TEST_OUTPUT_FILE=$(find target/debug -maxdepth 1 -type f -executable -name "$OUTPUT_NAME-*" -printf '%T@:%p\n' | sort -nr | head -n1 | sed 's/.*://')
+
+if [ -z "$TEST_OUTPUT_FILE" ]; then
+  echo "[kcov-rust] ERROR: No cargo-test output files found - aborting."
+  exit 1
+fi
+
+# Replace the 'debug' directory with 'cov' to store coverage reports
+COVERAGE_DIR=${TEST_OUTPUT_FILE/debug/cov}
+
+echo " ╒═ Running kcov-rust "
+echo " ├─> Found input: $TEST_OUTPUT_FILE"
+echo " ├─> Creating coverage output directory: $COVERAGE_DIR"
+mkdir -p "$COVERAGE_DIR"
+
+echo " ├─> Running kcov... "
+echo ""
+
+EXEC_KCOV="kcov --exclude-pattern=/.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_OUTPUT_FILE -q"
+echo $EXEC_KCOV
+$EXEC_KCOV
+
+if [ $? != "0" ]; then
+  echo " ┕━X kcov failed. aborting"
+  exit $?
+fi
+echo " ├─> kcov successful"
+echo " ╘═> kcov-rust complete"
+
