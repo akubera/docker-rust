@@ -1,0 +1,14 @@
+#
+# rust-codecov/Dockerfile
+#
+# Debian-based container with rustc/cargo and 'kcov'
+# (based on akubera/rust-kcov) along with a helper script
+# for uploading test coverge results to codecov.io
+#
+
+# based off images preloaded with kcov & rustc
+FROM akubera/rust-kcov:RUST-VERSION
+
+
+COPY upload-kcov-results-to-codecov /usr/bin/
+

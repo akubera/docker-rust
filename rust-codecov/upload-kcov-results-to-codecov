@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# upload-kcov-results-to-codecov
+#
+
+echo " ╒═ Running upload-kcov-results-to-codecov"
+
+bash <(curl -s https://codecov.io/bash) -X coveragepy -s target/cov/
+
+echo ""
+echo ""
+echo " ╘═> Upload complete"
+
