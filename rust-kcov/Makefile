@@ -27,7 +27,7 @@ TEMPLATE_ENV = RUST_DOWNLOAD_URL=${RUST_DOWNLOAD_URL} RUST_FULL_NAME=${RUST_FULL
 
 all: build
 
-Dockerfile-${RUST_VERSION}: Dockerfile kcov-rust
+Dockerfile-${RUST_VERSION}: Dockerfile.in kcov-rust
 	${TEMPLATE_ENV} envsubst < $< > $@
 
 build: Dockerfile-${RUST_VERSION}

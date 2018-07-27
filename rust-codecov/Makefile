@@ -10,7 +10,7 @@ DOCKER_REPO ?= akubera/rust-codecov
 .PHONY: build upload clean
 
 
-Dockerfile-${RUST_VERSION}: Dockerfile
+Dockerfile-${RUST_VERSION}: Dockerfile.in
 	sed "s/RUST-VERSION/${RUST_VERSION}/g" $< > $@
 
 build: Dockerfile-${RUST_VERSION}
