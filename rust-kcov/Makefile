@@ -27,6 +27,16 @@ TEMPLATE_ENV = RUST_DOWNLOAD_URL=${RUST_DOWNLOAD_URL} RUST_FULL_NAME=${RUST_FULL
 
 all: build
 
+build-standard:
+	RUST_VERSION=stable make build
+	RUST_VERSION=beta make build
+	RUST_VERSION=nightly make build
+
+upload-standard:
+	RUST_VERSION=stable make upload
+	RUST_VERSION=beta make upload
+	RUST_VERSION=nightly make upload
+
 Dockerfile-${RUST_VERSION}: Dockerfile.in kcov-rust
 	${TEMPLATE_ENV} envsubst < $< > $@
 
