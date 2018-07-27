@@ -4,7 +4,7 @@
 # Dockerfile build script
 #
 
-KCOV_VERSION ?= 33
+KCOV_VERSION ?= 35
 KCOV_DOWNLOAD_URL=https://github.com/simonkagstrom/kcov/archive/v${KCOV_VERSION}.tar.gz 
 KCOV_BUILD_DIR = kcov-${KCOV_VERSION}
 
