@@ -9,15 +9,18 @@
 FROM akubera/kcov:latest
 
 
+# Download and install rupstup-init
+RUN curl -L https://static.rust-lang.org/rustup/rustup-init.sh > /bin/rustup-init.sh\
+ && chmod +x /bin/rustup-init.sh
+
+# Default install is to /root/.cargo, forward to /usr/local
+RUN ln -s /usr/local /root/.cargo
+
 #===========================#
 # Download and Install Rust #
 #===========================#
-RUN curl -Ls $RUST_DOWNLOAD_URL | tar xz -C /tmp \
- && cd /tmp/$RUST_FULL_NAME \
- && ./install.sh --without=rust-docs \
- && cd - \
- && rm -fr /tmp/$RUST_FULL_NAME
-
+RUN rustup-init.sh -y --default-toolchain ${RUST_VERSION} \
+ && rm -r /root/.rustup/toolchains/${RUST_TOOLCHAIN}/share
 
 #======================#
 # Add Additional Files #
@@ -29,3 +32,4 @@ COPY kcov-rust /usr/bin/
 # Finalize Environment #
 #======================#
 WORKDIR /home
+
