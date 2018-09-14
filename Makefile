@@ -28,3 +28,6 @@ clear-cache:
 	docker rmi akubera/rust-kcov:beta akubera/rust-codecov:beta
 	docker rmi akubera/rust-kcov:nightly akubera/rust-codecov:nightly
 
+
+clean: clear-cache
+
