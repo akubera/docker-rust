@@ -28,6 +28,10 @@ build: Dockerfile
 upload: build
 	docker push ${REPO_NAME}:${DOCKER_TAG}
 
+upload-latest: upload
+	docker tag ${REPO_NAME}:latest ${REPO_NAME}:${DOCKER_TAG}
+	docker push ${REPO_NAME}:latest
+
 clean:
 	rm -rf Dockerfile
 
