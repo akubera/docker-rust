@@ -27,10 +27,10 @@ build.stable-%: build-%
 	docker tag akubera/rust-kcov:$(subst build-,,$<) akubera/rust-kcov:stable 
 
 build-%:
-	RUST_VERSION=`echo $@ | py -x 'x.partition("-")[2]'` sh -c $(MAKE_BUILD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_BUILD_CMD)
 
 upload-%: build-%
-	RUST_VERSION=`echo $@ | py -x 'x.partition("-")[2]'` sh -c $(MAKE_UPLOAD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_UPLOAD_CMD)
 
 
 build:
