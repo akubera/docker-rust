@@ -1,17 +1,19 @@
 #
 # Makefile
 #
-# To use: 
+# To use:
 #
 # Upload some version and call it stable, then update beta and nightly
 #
 # `make upload.stable-{VERSION}`
 # `make upload`
-# 
+#
 #  make upload.stable-1.33.0
 #  make upload
 #
 
+export DEBIAN_VERSION=buster
+export KCOV_VERSION=38
 
 all: build
 
@@ -23,8 +25,9 @@ full-%: upload.stable-% upload
 
 upload.stable-%: build.stable-% upload-% upload-stable
 
+
 build.stable-%: build-%
-	docker tag akubera/rust-kcov:$(subst build-,,$<) akubera/rust-kcov:stable 
+	docker tag akubera/rust-kcov:$(subst build-,,$<) akubera/rust-kcov:stable
 
 build-%:
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_BUILD_CMD)
@@ -52,4 +55,4 @@ clear-cache:
 
 
 clean: clear-cache
-
+	rm -rf rust-kcov/Dockerfile-*

@@ -4,6 +4,10 @@
 # Dockerfile build script
 #
 
+DEBIAN_VERSION ?= buster
+
+KCOV_VERSION ?= 38
+KCOV_DOWNLOAD_URL ?= https://github.com/simonkagstrom/kcov/archive/${KCOV_VERSION}.tar.gz
 RUST_VERSION ?= nightly
 RUST_TOOLCHAIN = ${RUST_VERSION}-x86_64-unknown-linux-gnu
 
@@ -19,18 +23,19 @@ endif
 RUST_DOWNLOAD_URL := https://static.rust-lang.org/dist/${RUST_ARCHIVE}
 
 
-DOCKER_TAG ?= ${RUST_VERSION}
+DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
 REPO_NAME ?= akubera/rust-kcov
 
-TEMPLATE_ENV = RUST_TOOLCHAIN=${RUST_TOOLCHAIN} RUST_FULL_NAME=${RUST_FULL_NAME}
+TEMPLATE_ENV = RUST_TOOLCHAIN=${RUST_TOOLCHAIN} RUST_FULL_NAME=${RUST_FULL_NAME} KCOV_URL=${KCOV_DOWNLOAD_URL} DEBIAN_VERSION=${DEBIAN_VERSION}
 
-.PHONY: build upload clean 
+.PHONY: build upload clean
 
 
 all: build
 
+
 build-standard:
-	RUST_VERSION=stable make build
+	RUST_VERSION=stable $(MAKE) build
 	RUST_VERSION=beta make build
 	RUST_VERSION=nightly make build
 
@@ -39,10 +44,10 @@ upload-standard:
 	RUST_VERSION=beta make upload
 	RUST_VERSION=nightly make upload
 
-Dockerfile-${RUST_VERSION}: Dockerfile.in kcov-rust
+Dockerfile-${DOCKER_TAG}: Dockerfile.in kcov-rust
 	${TEMPLATE_ENV} envsubst < $< > $@
 
-build: Dockerfile-${RUST_VERSION}
+build: Dockerfile-${DOCKER_TAG}
 	docker build -f $< --rm --tag=${REPO_NAME}:${DOCKER_TAG} .
 
 upload: build
@@ -50,4 +55,3 @@ upload: build
 
 clean:
 	rm -rf Dockerfile-*
-
