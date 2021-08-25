@@ -1,34 +1,33 @@
 #
 # Makefile
 #
-# To use:
+# To use, call `make {VERSION}` or `make build-{VERSION}` to enter
+# rust-kcov & rust-codecov, create the Dockerfiles and call `docker build`
 #
-# Upload some version and call it stable, then update beta and nightly
+# call `make upload-{VERSION} to docker-push the version to ${REPO_NAME}
 #
-# `make upload.stable-{VERSION}`
-# `make upload`
+# examples:
 #
-#  make upload.stable-1.33.0
-#  make upload
+#  make build-1.33.0
+#  make 1.55.0 DEBIAN_VERSION=bullseye
+#  make upload-1.54.0
 #
 
 export DEBIAN_VERSION=buster
 export KCOV_VERSION=38
 
-all: build
-
-MAKE_BUILD_CMD = 'make -C rust-kcov build && make -C rust-codecov build'
-MAKE_UPLOAD_CMD = 'make -C rust-kcov upload && make -C rust-codecov upload'
+MAKE_BUILD_CMD = '$(MAKE) -C rust-kcov build && $(MAKE) -C rust-codecov build'
+MAKE_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload && $(MAKE) -C rust-codecov upload'
 
 
-full-%: upload.stable-% upload
+.PHONY: all clean build-% upload-% 1.%
 
-upload.stable-%: build.stable-% upload-% upload-stable
+all: 1.34.2 1.36.0 1.42.0 1.54.0
 
 
-build.stable-%: build-%
-	docker tag akubera/rust-kcov:$(subst build-,,$<) akubera/rust-kcov:stable
+1.%: build-1.%;
 
+build-1.34.2: DEBIAN_VERSION=stretch
 build-%:
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_BUILD_CMD)
 
@@ -36,23 +35,7 @@ upload-%: build-%
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_UPLOAD_CMD)
 
 
-build:
-	#RUST_VERSION=stable sh -c $(MAKE_BUILD_CMD)
-	RUST_VERSION=beta sh -c $(MAKE_BUILD_CMD)
-	RUST_VERSION=nightly sh -c $(MAKE_BUILD_CMD)
-
-
-upload:
-	#RUST_VERSION=stable sh -c $(MAKE_UPLOAD_CMD)
-	RUST_VERSION=beta sh -c $(MAKE_UPLOAD_CMD)
-	RUST_VERSION=nightly sh -c $(MAKE_UPLOAD_CMD)
-
-
-clear-cache:
-	docker rmi akubera/rust-kcov:stable akubera/rust-codecov:stable
-	docker rmi akubera/rust-kcov:beta akubera/rust-codecov:beta
-	docker rmi akubera/rust-kcov:nightly akubera/rust-codecov:nightly
-
-
-clean: clear-cache
-	rm -rf rust-kcov/Dockerfile-*
+clean:
+	$(MAKE) -C kcov clean
+	$(MAKE) -C rust-kcov clean
+	$(MAKE) -C rust-codecov clean
