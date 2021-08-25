@@ -15,6 +15,12 @@ rust-codecov
   results to codecov
 
 
+Dependencies
+------------
+
+These makefiles depend on the ``envsubst`` utility found in the ``gettext`` software suite.
+
+
 Usage
 -----
 
