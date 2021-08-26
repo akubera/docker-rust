@@ -7,4 +7,9 @@ echo " ╒═ Running upload-kcov-results-to-codecov"
 
 bash <(curl -s https://codecov.io/bash) -X coveragepy -s target/cov/  2>&1 | sed 's/^/ │/'
 
-echo " ╘═> Upload complete"
+if [ $? != "0" ]; then
+  echo " ┕━X Upload failed. aborting"
+  exit $?
+fi
+
+echo " ╘══ Upload complete"

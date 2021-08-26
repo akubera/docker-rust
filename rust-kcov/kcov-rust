@@ -59,7 +59,7 @@ echo " ├─➤ Running kcov... "
 echo " │"
 
 EXEC_KCOV="kcov --exclude-pattern=/.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_EXECUTABLE -q"
-echo " ┝ $EXEC_KCOV"
+echo " │ $ $EXEC_KCOV"
 
 $EXEC_KCOV 2>&1 | sed 's/^/ │/'
 
@@ -68,4 +68,4 @@ if [ $? != "0" ]; then
   exit $?
 fi
 echo " ├─➤ kcov successful"
-echo " ╘═➤ kcov-rust complete"
+echo " ╘══ kcov-rust complete"
