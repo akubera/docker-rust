@@ -22,7 +22,9 @@ MAKE_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload && $(MAKE) -C rust-codecov upload
 
 .PHONY: all clean build-% upload-% 1.%
 
-all: 1.34.2 1.36.0 1.42.0 1.54.0
+DEFAULT_TARGETS=1.34.2 1.36.0 1.42.0 1.54.0
+
+all: $(DEFAULT_TARGETS)
 
 
 1.%: build-1.%;
@@ -31,6 +33,8 @@ build-1.34.2: DEBIAN_VERSION=stretch
 build-%:
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_BUILD_CMD)
 
+upload: $(addprefix upload-,$(DEFAULT_TARGETS))
+upload-1.34.2: DEBIAN_VERSION=stretch
 upload-%: build-%
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_UPLOAD_CMD)
 
