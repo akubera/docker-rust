@@ -3,13 +3,13 @@
 #
 
 DEBIAN_VERSION ?= buster
-RUST_VERSION ?= nightly
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
 DOCKER_REPO ?= akubera/rust-codecov
 
-.PHONY: build upload clean
+.PHONY: build upload clean Dockerfile
 
 
+Dockerfile: Dockerfile-${DOCKER_TAG}
 Dockerfile-${DOCKER_TAG}: Dockerfile.in
 	sed "s/DOCKER_TAG/${DOCKER_TAG}/g" $< > $@
 

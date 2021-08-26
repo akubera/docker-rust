@@ -9,5 +9,4 @@
 # based off images preloaded with kcov & rustc
 FROM akubera/rust-kcov:DOCKER_TAG
 
-
 COPY upload-kcov-results-to-codecov /usr/bin/
