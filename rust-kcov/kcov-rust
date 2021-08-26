@@ -61,7 +61,7 @@ echo " │"
 EXEC_KCOV="kcov --exclude-pattern=/.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_EXECUTABLE -q"
 echo " ┝ $EXEC_KCOV"
 
-$EXEC_KCOV 2>&1 | sed 's/^/│ /'
+$EXEC_KCOV 2>&1 | sed 's/^/ │/'
 
 if [ $? != "0" ]; then
   echo " ┕━X kcov failed. aborting"

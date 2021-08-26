@@ -5,9 +5,6 @@
 
 echo " ╒═ Running upload-kcov-results-to-codecov"
 
-bash <(curl -s https://codecov.io/bash) -X coveragepy -s target/cov/
+bash <(curl -s https://codecov.io/bash) -X coveragepy -s target/cov/  2>&1 | sed 's/^/ │/'
 
-echo ""
-echo ""
 echo " ╘═> Upload complete"
-
