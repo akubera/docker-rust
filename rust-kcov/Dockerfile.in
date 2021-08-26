@@ -12,14 +12,21 @@ RUN apt-get update -qy \
  && apt-get install -qy --no-install-recommends \
 	binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev \
 	wget cmake ninja-build g++ python3-minimal ca-certificates
-RUN wget -c -q $KCOV_URL -O - | tar xz -C /usr/src --strip-components 1
-RUN cmake -S /usr/src -B /usr/src -DCMAKE_INSTALL_PREFIX=/opt/local -DCMAKE_BUILD_TYPE=Release -Wno-dev -GNinja \
- && cmake --build /usr/src --target install \
+#============================#
+# Fetch, build, install kcov #
+#============================#
+WORKDIR /usr/src
+RUN wget -q $KCOV_URL -O - | tar xz --strip-components 1
+RUN cmake -DCMAKE_INSTALL_PREFIX=/opt/local -DCMAKE_BUILD_TYPE=Release -Wno-dev -GNinja \
+ && cmake --build . --target install \
  && strip /opt/local/bin/*
 
+#==================================#
+# Copy built files to output image #
+#==================================#
 FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
 COPY --from=builder /opt/local/ /usr/local/
-COPY --from=builder /usr/lib/x86_64-linux-gnu/libdw.so.1 /usr/lib/x86_64-linux-gnu/
+COPY --from=builder /usr/lib/${ARCH:-x86_64}-linux-gnu/libdw.so.1 /usr/lib/${ARCH:-x86_64}-linux-gnu/
 COPY --from=builder /usr/share/doc/libdw1/copyright /usr/share/doc/libdw1/copyright
 
 COPY kcov-rust /usr/bin/
