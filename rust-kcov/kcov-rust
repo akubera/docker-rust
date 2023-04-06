@@ -58,14 +58,19 @@ mkdir -p "$COVERAGE_DIR"
 echo " ├─➤ Running kcov... "
 echo " │"
 
-EXEC_KCOV="kcov --exclude-pattern=/.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_EXECUTABLE -q"
+EXEC_KCOV="kcov --exclude-pattern=.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_EXECUTABLE -q"
 echo " │ $ $EXEC_KCOV"
 
 $EXEC_KCOV 2>&1 | sed 's/^/ │/'
+RETVAL=$?
 
-if [ $? != "0" ]; then
+if [ $RETVAL != "0" ]; then
   echo " ┕━X kcov failed. aborting"
-  exit $?
+  exit $RETVAL
 fi
+
+# copy coverage xml file to current directory
+find $TEST_OUTPUT_DIR -name cobertura.xml -exec cp {} . \;
+
 echo " ├─➤ kcov successful"
 echo " ╘══ kcov-rust complete"
