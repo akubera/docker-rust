@@ -10,14 +10,15 @@ FROM debian:${DEBIAN_VERSION} AS builder
 
 RUN apt-get update -qy \
  && apt-get install -qy --no-install-recommends \
-	binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev \
+	binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev libssl-dev \
 	wget cmake ninja-build g++ python3-minimal ca-certificates
+
 #============================#
 # Fetch, build, install kcov #
 #============================#
 WORKDIR /usr/src
 RUN wget -q $KCOV_URL -O - | tar xz --strip-components 1
-RUN cmake -DCMAKE_INSTALL_PREFIX=/opt/local -DCMAKE_BUILD_TYPE=Release -Wno-dev -GNinja \
+RUN cmake . -DCMAKE_INSTALL_PREFIX=/opt/local -DCMAKE_BUILD_TYPE=Release -Wno-dev -GNinja \
  && cmake --build . --target install \
  && strip /opt/local/bin/*
 
