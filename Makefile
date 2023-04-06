@@ -13,8 +13,8 @@
 #  make upload-1.54.0
 #
 
-export DEBIAN_VERSION=buster
-export KCOV_VERSION=38
+export DEBIAN_VERSION=bullseye
+export KCOV_VERSION=41
 
 MAKE_BUILD_CMD = '$(MAKE) -C rust-kcov build && $(MAKE) -C rust-codecov build'
 MAKE_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload && $(MAKE) -C rust-codecov upload'

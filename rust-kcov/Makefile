@@ -4,10 +4,10 @@
 # Dockerfile build script
 #
 
-DEBIAN_VERSION ?= buster
+DEBIAN_VERSION ?= bullseye
 
-KCOV_VERSION ?= 38
-KCOV_DOWNLOAD_URL ?= https://github.com/simonkagstrom/kcov/archive/${KCOV_VERSION}.tar.gz
+KCOV_VERSION ?= 41
+KCOV_DOWNLOAD_URL ?= https://github.com/simonkagstrom/kcov/archive/v${KCOV_VERSION}.tar.gz
 
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
 REPO_NAME ?= akubera/rust-kcov
