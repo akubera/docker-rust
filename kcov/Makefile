@@ -4,8 +4,8 @@
 # Dockerfile build script
 #
 
-KCOV_VERSION ?= 38
-KCOV_DOWNLOAD_URL=https://github.com/simonkagstrom/kcov/archive/${KCOV_VERSION}.tar.gz
+KCOV_VERSION ?= 41
+KCOV_DOWNLOAD_URL=https://github.com/simonkagstrom/kcov/archive/v${KCOV_VERSION}.tar.gz
 KCOV_BUILD_DIR = kcov-${KCOV_VERSION}
 
 DOCKER_TAG ?= v${KCOV_VERSION}
