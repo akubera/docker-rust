@@ -4,8 +4,11 @@
 #
 
 echo " ╒═ Running upload-kcov-results-to-codecov"
+echo " ├─➤ Fetching codecov script"
+curl -Ls https://codecov.io/bash -o codecov
+chmod +x codecov
 
-bash <(curl -s https://codecov.io/bash) -X coveragepy -s target/cov/  2>&1 | sed 's/^/ │/'
+bash <() -X coveragepy -s target/cov/  2>&1 | sed 's/^/ │/'
 
 if [ $? != "0" ]; then
   echo " ┕━X Upload failed. aborting"
