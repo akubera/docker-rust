@@ -16,8 +16,8 @@
 export DEBIAN_VERSION=bullseye
 export KCOV_VERSION=41
 
-MAKE_BUILD_CMD = '$(MAKE) -C rust-kcov build && $(MAKE) -C rust-codecov build'
-MAKE_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload && $(MAKE) -C rust-codecov upload'
+MAKE_BUILD_CMD = '$(MAKE) -C rust-grcov build'
+MAKE_UPLOAD_CMD = '$(MAKE) -C rust-grcov upload'
 
 
 .PHONY: all clean build-% upload-% 1.%

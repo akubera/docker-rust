@@ -19,7 +19,7 @@ FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
 RUN rustup component add llvm-tools-preview
 
 COPY --from=builder /opt/local/bin/grcov /usr/local/bin/grcov
-COPY grcov-rust /usr/local/bin/grcov-rust
+COPY --from=builder /opt/local/bin/cargo-criterion /usr/local/bin/cargo-criterion
 COPY grcov-rust /usr/local/bin/grcov-rust
 
 #======================#
