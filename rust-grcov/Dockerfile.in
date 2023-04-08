@@ -1,0 +1,28 @@
+#
+# rust-grcov/Dockerfile
+#
+# Debian-based container with rustc/cargo and 'grcov' - a
+# coverage program which can analyze the code coverage of
+# rust tests.
+#
+
+FROM rust:${RUST_VERSION}-${DEBIAN_VERSION} as builder
+
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    cargo install grcov cargo-criterion --root /opt/local/
+
+#==================================#
+# Copy built files to output image #
+#==================================#
+FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
+
+RUN rustup component add llvm-tools-preview
+
+COPY --from=builder /opt/local/bin/grcov /usr/local/bin/grcov
+COPY grcov-rust /usr/local/bin/grcov-rust
+COPY grcov-rust /usr/local/bin/grcov-rust
+
+#======================#
+# Finalize Environment #
+#======================#
+WORKDIR /home

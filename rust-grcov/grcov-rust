@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# grcov-rust
+#
+
+PROGRAM_NAME=$0
+OUTPUT_NAME=''
+
+function print_usage()
+{
+  echo "$PROGRAM_NAME"
+  echo ""
+  echo "usage: $PROGRAM_NAME [TARGET_NAME]"
+  echo ""
+  echo "  TARGET_NAME : The name of the cargo library to test (uses the most recently created test executable by default)"
+}
+
+while (( $# )); do
+  arg="$1"
+  case $arg in
+  -h|--help)
+      print_usage
+      exit 0
+      ;;
+  *)
+      if [ -z $OUTPUT_NAME ]; then
+        OUTPUT_NAME=$arg
+      else
+        echo "Unexpected argument '$arg'"
+        print_usage
+        exit 1
+      fi
+     ;;
+  esac
+  shift
+done
+
+if [ -z $OUTPUT_NAME ]; then OUTPUT_NAME=*; fi
+
+TEST_OUTPUT_DIR=target/debug/deps
+
+# this finds the newest file matching the pattern target/debug/deps/<ARG>-*, which is the test executable
+TEST_EXECUTABLE=$(find $TEST_OUTPUT_DIR -type f -executable -name "$OUTPUT_NAME-*" -printf '%T@:%p\n' | sort -nr | head -n1 | sed 's/.*://')
+
+if [ -z "$TEST_EXECUTABLE" ]; then
+  echo "[grcov-rust] ERROR: No cargo-test output files found - aborting."
+  exit 1
+fi
+
+# Replace the 'debug' directory with 'cov' to store coverage reports
+COVERAGE_DIR=${TEST_EXECUTABLE/"debug/deps"/cov}
+
+echo " ╒═ Running grcov-rust "
+echo " ├─➤ Found input: $TEST_EXECUTABLE"
+echo " ├─➤ Creating coverage output directory: $COVERAGE_DIR"
+mkdir -p "$COVERAGE_DIR"
+
+echo " ├─➤ Running grcov... "
+echo " │"
+
+EXEC_GRCOV="grcov . --binary-path '$TEST_EXECUTABLE' -s . -tcobertura --branch --ignore-not-existing --ignore "../*" --ignore "/*" -o cobertura.xml"
+echo " │ $ $EXEC_GRCOV"
+
+$EXEC_GRCOV 2>&1 | sed 's/^/ │/'
+RETVAL=$?
+
+if [[ $RETVAL -ne 0 ]]; then
+  echo " ┕━X grcov failed. aborting"
+  exit $RETVAL
+fi
+
+echo " ├─➤ grcov successful"
+echo " ╘══ grcov-rust complete"
