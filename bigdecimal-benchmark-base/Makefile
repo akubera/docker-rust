@@ -7,7 +7,7 @@
 DEBIAN_VERSION ?= bullseye
 
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
-REPO_NAME ?= akubera/bigdecimal-test-data
+REPO_NAME ?= akubera/bigdecimal-benchmark-base
 
 TEMPLATE_ENV = DEBIAN_VERSION=${DEBIAN_VERSION} ARCH=$(shell uname -m)
 
