@@ -16,13 +16,18 @@
 export DEBIAN_VERSION=bullseye
 export KCOV_VERSION=41
 
-MAKE_BUILD_CMD = '$(MAKE) -C rust-grcov build'
-MAKE_UPLOAD_CMD = '$(MAKE) -C rust-grcov upload'
+MAKE_KCOV_BUILD_CMD = '$(MAKE) -C rust-kcov build'
+MAKE_KCOV_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload'
 
+MAKE_GRCOV_BUILD_CMD = '$(MAKE) -C rust-grcov build'
+MAKE_GRCOV_UPLOAD_CMD = '$(MAKE) -C rust-grcov upload'
+
+MAKE_CODECOV_BUILD_CMD = '$(MAKE) -C rust-codecov build'
+MAKE_CODECOV_UPLOAD_CMD = '$(MAKE) -C rust-codecov upload'
 
 .PHONY: all clean build-% upload-% 1.%
 
-DEFAULT_TARGETS=1.34.2 1.36.0 1.42.0 1.54.0
+DEFAULT_TARGETS=1.43.2 1.54.0 1.70.0
 
 all: $(DEFAULT_TARGETS)
 
@@ -31,12 +36,16 @@ all: $(DEFAULT_TARGETS)
 
 build-1.34.2: DEBIAN_VERSION=stretch
 build-%:
-	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_BUILD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_KCOV_BUILD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_GRCOV_BUILD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_CODECOV_BUILD_CMD)
 
 upload: $(addprefix upload-,$(DEFAULT_TARGETS))
 upload-1.34.2: DEBIAN_VERSION=stretch
 upload-%: build-%
-	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_UPLOAD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_KCOV_UPLOAD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_GRCOV_UPLOAD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_CODECOV_UPLOAD_CMD)
 
 
 clean:
