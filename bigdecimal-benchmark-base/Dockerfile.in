@@ -1,0 +1,13 @@
+#
+# bigdecimal-benchmark-base/Dockerfile
+#
+# Debian-based container with rustc/cargo and suite of benchmark
+# files at /data
+#
+
+FROM akubera/rust-kcov:${RUST_VERSION}-${DEBIAN_VERSION}
+
+ENV BIGDECIMAL_BENCHMARK_DATA_PATH /data
+
+ADD benchmark-data.tgz /data
+
