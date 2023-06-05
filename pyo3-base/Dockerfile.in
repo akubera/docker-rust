@@ -1,0 +1,11 @@
+#
+# pyo3-base/Dockerfile
+#
+# Debian-based container with rustc/cargo and python3-dev
+#
+
+FROM akubera/rust-kcov:${RUST_VERSION}-${DEBIAN_VERSION}
+
+RUN apt-get update -qq \
+ && apt-get install -yqq --no-install-recommends python3-dev \
+ && rm -rf /var/lib/apt/lists/*
