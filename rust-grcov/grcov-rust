@@ -62,7 +62,7 @@ EXEC_GRCOV="grcov . --binary-path '$TEST_EXECUTABLE' -s . -tcobertura --branch -
 echo " │ $ $EXEC_GRCOV"
 
 $EXEC_GRCOV 2>&1 | sed 's/^/ │/'
-RETVAL=$?
+RETVAL=${PIPESTATUS[0]}
 
 if [[ $RETVAL -ne 0 ]]; then
   echo " ┕━X grcov failed. aborting"

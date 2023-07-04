@@ -62,7 +62,7 @@ EXEC_KCOV="kcov --exclude-pattern=.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_E
 echo " │ $ $EXEC_KCOV"
 
 $EXEC_KCOV 2>&1 | sed 's/^/ │/'
-RETVAL=$?
+RETVAL= ${PIPESTATUS[0]}
 
 if [ $RETVAL != "0" ]; then
   echo " ┕━X kcov failed. aborting"
