@@ -1,0 +1,16 @@
+#
+# Dockerfile - akubera/rust
+#
+# Debian-based container with rust/cargo/clippy
+#
+
+FROM rust:${RUST_VERSION}-${DEBIAN_VERSION} AS builder
+
+RUN cargo install cargo-semver-checks
+
+FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
+
+RUN rustup component add clippy
+COPY --from=builder /usr/local/cargo/bin/cargo-semver-checks /usr/local/cargo/bin/cargo-semver-checks
+
+WORKDIR /home
