@@ -14,7 +14,7 @@
 #
 
 export DEBIAN_VERSION=bullseye
-export KCOV_VERSION=41
+export KCOV_VERSION=42
 
 MAKE_KCOV_BUILD_CMD = '$(MAKE) -C rust-kcov build'
 MAKE_KCOV_UPLOAD_CMD = '$(MAKE) -C rust-kcov upload'
