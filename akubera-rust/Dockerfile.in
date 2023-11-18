@@ -6,6 +6,11 @@
 
 FROM rust:${RUST_VERSION}-${DEBIAN_VERSION} AS builder
 
+
+RUN apt-get update -qy \
+ && apt-get install -qy --no-install-recommends \
+        binutils-dev cmake
+
 RUN cargo install cargo-semver-checks
 
 FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
