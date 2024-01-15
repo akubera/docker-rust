@@ -10,10 +10,11 @@ curl -Ls https://codecov.io/bash -o codecov
 chmod +x codecov
 
 ./codecov -X coveragepy -s target/cov/  2>&1 | sed 's/^/ │/'
+UPLOAD_RETVAL="$?"
 
-if [ $? != "0" ]; then
+if [ "$UPLOAD_RETVAL" != "0" ]; then
   echo " ┕━X Upload failed. aborting"
-  exit $?
+  exit "$UPLOAD_RETVAL"
 fi
 
 echo " ╘══ Upload complete"
