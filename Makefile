@@ -27,7 +27,7 @@ MAKE_CODECOV_UPLOAD_CMD = '$(MAKE) -C rust-codecov upload'
 
 .PHONY: all clean build-% upload-% 1.%
 
-DEFAULT_TARGETS=1.43.2 1.54.0 1.70.0
+DEFAULT_TARGETS=1.43.2 1.54.0 1.75.0
 
 all: $(DEFAULT_TARGETS)
 
