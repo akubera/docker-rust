@@ -23,7 +23,7 @@ while (( $# )); do
       exit 0
       ;;
   *)
-      if [ -z $OUTPUT_NAME ]; then
+      if [ -z "$OUTPUT_NAME" ]; then
         OUTPUT_NAME=$arg
       else
         echo "Unexpected argument '$arg'"
@@ -35,7 +35,7 @@ while (( $# )); do
   shift
 done
 
-if [ -z $OUTPUT_NAME ]; then OUTPUT_NAME=*; fi
+if [ -z "$OUTPUT_NAME" ]; then OUTPUT_NAME='*'; fi
 
 TEST_OUTPUT_DIR=target/debug/deps
 
@@ -62,11 +62,11 @@ EXEC_KCOV="kcov --exclude-pattern=.cargo,/usr/lib --verify $COVERAGE_DIR $TEST_E
 echo " │ $ $EXEC_KCOV"
 
 $EXEC_KCOV 2>&1 | sed 's/^/ │/'
-RETVAL= ${PIPESTATUS[0]}
+RETVAL="${PIPESTATUS[0]}"
 
-if [ $RETVAL != "0" ]; then
+if [ "$RETVAL" != "0" ]; then
   echo " ┕━X kcov failed. aborting"
-  exit $RETVAL
+  exit "$RETVAL"
 fi
 
 # copy coverage xml file to current directory
