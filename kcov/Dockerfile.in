@@ -2,7 +2,7 @@
 # akubera/kcov/Dockerfile.in
 #
 
-FROM debian:jessie-slim
+FROM debian:bookworm-slim
 
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -13,9 +13,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 #============================#
 RUN apt-get update -qq \
  && apt-get install -yqq --no-install-recommends  \
-      cmake g++ make pkg-config python-minimal ca-certificates \
+      cmake g++ make pkg-config python3-minimal ca-certificates \
       libdw-dev libcurl4-openssl-dev binutils-dev \
-      libiberty-dev zlib1g-dev libelf-dev \
+      libiberty-dev zlib1g-dev libelf-dev libssl-dev \
       gcc git curl \
 #=========================#
 # Download and build kcov #
@@ -27,7 +27,7 @@ RUN apt-get update -qq \
 # Cleanup #
 #=========#
  && rm -r $KCOV_BUILD_DIR \
- && apt-get remove -yqq make cmake g++ python-minimal pkg-config \
+ && apt-get remove -yqq make cmake g++ python3-minimal pkg-config \
  && apt-get autoremove -yqq \
  && rm -rf /var/lib/apt/lists/*
 
