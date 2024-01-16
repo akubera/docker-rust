@@ -2,7 +2,7 @@
 # rust-codecov
 #
 
-DEBIAN_VERSION ?= bullseye
+DEBIAN_VERSION ?= bookworm
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
 DOCKER_REPO ?= akubera/rust-codecov
 

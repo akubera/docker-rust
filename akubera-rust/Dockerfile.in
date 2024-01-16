@@ -4,7 +4,7 @@
 # Debian-based container with rust/cargo/clippy
 #
 
-FROM rust:${RUST_VERSION}-${DEBIAN_VERSION} AS builder
+FROM rust:${RUST_TAG} AS builder
 
 
 RUN apt-get update -qy \
@@ -13,7 +13,7 @@ RUN apt-get update -qy \
 
 RUN cargo install cargo-semver-checks
 
-FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
+FROM rust:${RUST_TAG}
 
 RUN rustup component add clippy
 COPY --from=builder /usr/local/cargo/bin/cargo-semver-checks /usr/local/cargo/bin/cargo-semver-checks

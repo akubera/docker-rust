@@ -4,12 +4,13 @@
 # Dockerfile build script
 #
 
-DEBIAN_VERSION ?= bullseye
+DEBIAN_VERSION ?= bookworm
 
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
+RUST_TAG ?= ${RUST_VERSION}-slim-${DEBIAN_VERSION}
 REPO_NAME ?= akubera/rust
 
-TEMPLATE_ENV = DEBIAN_VERSION=${DEBIAN_VERSION} ARCH=$(shell uname -m)
+TEMPLATE_ENV = RUST_TAG=$(RUST_TAG) ARCH=$(shell uname -m)
 
 .PHONY: build upload clean Dockerfile
 

@@ -6,7 +6,7 @@
 # rust tests.
 #
 
-FROM rust:${RUST_VERSION}-${DEBIAN_VERSION} as builder
+FROM rust:${RUST_TAG} as builder
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     cargo install grcov cargo-criterion --root /opt/local/
@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 #==================================#
 # Copy built files to output image #
 #==================================#
-FROM rust:${RUST_VERSION}-${DEBIAN_VERSION}
+FROM rust:${RUST_TAG}
 
 RUN rustup component add llvm-tools-preview
 
