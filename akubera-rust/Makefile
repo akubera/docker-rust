@@ -7,21 +7,19 @@
 DEBIAN_VERSION ?= bookworm
 
 DOCKER_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
-RUST_TAG ?= ${RUST_VERSION}-slim-${DEBIAN_VERSION}
+RUST_TAG ?= ${RUST_VERSION}-${DEBIAN_VERSION}
 REPO_NAME ?= akubera/rust
 
-TEMPLATE_ENV = RUST_TAG=$(RUST_TAG) ARCH=$(shell uname -m)
+ifeq ($(strip $(RUST_VERSION)),)
+$(error '$$RUST_VERSION is empty')
+endif
 
-.PHONY: build upload clean Dockerfile
+.PHONY: all build upload clean Dockerfile
 
 all: build
 
-Dockerfile: Dockerfile-${DOCKER_TAG}
-Dockerfile-${DOCKER_TAG}: Dockerfile.in
-	${TEMPLATE_ENV} envsubst < $< > $@
-
-build: Dockerfile-${DOCKER_TAG}
-	docker build -f $< --rm --tag=${REPO_NAME}:${DOCKER_TAG} .
+build: Dockerfile
+	docker build -f $< --rm --tag=${REPO_NAME}:${DOCKER_TAG} --build-arg RUST_TAG=$(RUST_TAG) .
 
 upload: build
 	docker push ${REPO_NAME}:${DOCKER_TAG}

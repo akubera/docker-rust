@@ -4,6 +4,8 @@
 # Debian-based container with rust/cargo/clippy
 #
 
+ARG RUST_TAG
+
 FROM rust:${RUST_TAG} AS builder
 
 
