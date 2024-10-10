@@ -13,7 +13,7 @@ RUN apt-get update -qy \
  && apt-get install -qy --no-install-recommends \
         binutils-dev cmake
 
-RUN cargo install cargo-semver-checks
+RUN cargo install cargo-semver-checks just
 
 FROM rust:${RUST_TAG}
 
