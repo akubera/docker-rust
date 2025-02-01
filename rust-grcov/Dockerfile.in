@@ -6,7 +6,7 @@
 # rust tests.
 #
 
-FROM rust:${RUST_TAG} as builder
+FROM rust:${RUST_TAG} AS builder
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     cargo install grcov cargo-criterion --root /opt/local/
