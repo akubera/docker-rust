@@ -19,5 +19,6 @@ FROM rust:${RUST_TAG}
 
 RUN rustup component add clippy
 COPY --from=builder /usr/local/cargo/bin/cargo-semver-checks /usr/local/cargo/bin/cargo-semver-checks
+COPY --from=builder /usr/local/cargo/bin/just /usr/local/cargo/bin/just
 
 WORKDIR /home
