@@ -14,7 +14,7 @@ echo "BUILDING $RUST_VERSION"
 # enough time to ctrl-c?
 sleep 2
 
-make RUST_VERSION="$RUST_VERSION"
+make $RUST_VERSION
 
 #
 # akubera/rust
