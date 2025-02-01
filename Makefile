@@ -25,6 +25,9 @@ MAKE_GRCOV_UPLOAD_CMD = '$(MAKE) -C rust-grcov upload'
 MAKE_CODECOV_BUILD_CMD = '$(MAKE) -C rust-codecov build'
 MAKE_CODECOV_UPLOAD_CMD = '$(MAKE) -C rust-codecov upload'
 
+MAKE_AKUBERA_BUILD_CMD = '$(MAKE) -C akubera-rust build'
+MAKE_AKUBERA_UPLOAD_CMD = '$(MAKE) -C akubera-rust upload'
+
 .PHONY: all clean build-% upload-% 1.%
 
 DEFAULT_TARGETS=1.43.2 1.54.0 1.75.0
@@ -39,6 +42,7 @@ build-%:
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_KCOV_BUILD_CMD)
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_GRCOV_BUILD_CMD)
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_CODECOV_BUILD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_AKUBERA_BUILD_CMD)
 
 upload: $(addprefix upload-,$(DEFAULT_TARGETS))
 upload-1.34.2: DEBIAN_VERSION=stretch
@@ -46,6 +50,7 @@ upload-%: build-%
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_KCOV_UPLOAD_CMD)
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_GRCOV_UPLOAD_CMD)
 	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_CODECOV_UPLOAD_CMD)
+	RUST_VERSION=`echo $@ | cut -d- -f 2` sh -c $(MAKE_AKUBERA_UPLOAD_CMD)
 
 
 clean:

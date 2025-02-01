@@ -17,7 +17,7 @@ RUN apt-get update -qy \
 # Fetch, build, install kcov #
 #============================#
 WORKDIR /usr/src
-RUN wget -q $KCOV_URL -O - | tar xz --strip-components 1
+RUN wget -q ${KCOV_URL} -O - | tar xz --strip-components 1
 RUN cmake . -DCMAKE_INSTALL_PREFIX=/opt/local -DCMAKE_BUILD_TYPE=Release -Wno-dev -GNinja \
  && cmake --build . --target install \
  && strip /opt/local/bin/*
